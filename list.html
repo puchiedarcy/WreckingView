@@ -1,0 +1,32 @@
+{{define "list"}}
+<table border='1px'>
+    <tr>
+        {{range .Headers}}
+            {{template "header" . }}
+        {{end}}
+    </tr>
+    {{range .Rows}}
+        {{template "row" .}}
+    {{end}}
+</table>
+{{end}}
+
+{{define "header"}}
+<th>{{.}}</th>
+{{end}}
+
+{{define "row"}}
+<tr>
+    <td>{{.Number}}</td>
+    <td>{{.Name}}</td>
+    <td>{{template "upload" .}}</td>
+</tr>
+{{end}}
+
+{{define "upload"}}
+<form action="/upload" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="phase" value="{{.Number}}">
+    <input type="file" name="image"><br>
+    <input type="Submit" value="Add Image"><br>
+</form>
+{{end}}
