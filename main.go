@@ -26,12 +26,26 @@ func init() {
     http.HandleFunc("/favicon.ico", faviconHandler)
     http.HandleFunc("/save", saveHandler)
     http.HandleFunc("/upload", uploadHandler)
+    http.HandleFunc("/rom", romHandler)
     http.HandleFunc("/", handler)
 }
 
 func faviconHandler(w http.ResponseWriter, r *http.Request) {
     return
 }
+
+func romHandler(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "text/html")
+    fmt.Fprint(w, "<!DOCTYPE html><html>")
+    fmt.Fprint(w, "<head><meta charset='UTF-8'></head>")
+    fmt.Fprint(w, "<body>")
+    
+    t2, _ := template.ParseFiles("rom.html")
+    t2.Execute(w, nil)
+    
+    fmt.Fprint(w, "</body></html>")
+}
+
 
 func saveHandler(w http.ResponseWriter, r *http.Request) {
     ctx := appengine.NewContext(r)

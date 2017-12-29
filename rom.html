@@ -1,0 +1,207 @@
+<script>
+var letters = {};
+letters[0] = 0;
+letters[1] = 1;
+letters[2] = 2;
+letters[3] = 3;
+letters[4] = 4;
+letters[5] = 5;
+letters[6] = 6;
+letters[7] = 7;
+letters[8] = 8;
+letters[9] = 9;
+letters[10] = 'A';
+letters[11] = 'B';
+letters[12] = 'C';
+letters[13] = 'D';
+letters[14] = 'E';
+letters[15] = 'F';
+letters[16] = 'G';
+letters[17] = 'H';
+letters[18] = 'I';
+letters[19] = 'J';
+letters[20] = 'K';
+letters[21] = 'L';
+letters[22] = 'M';
+letters[23] = 'N';
+letters[24] = 'O';
+letters[25] = 'P';
+letters[26] = 'Q';
+letters[27] = 'R';
+letters[28] = 'S';
+letters[29] = 'T';
+letters[30] = 'U';
+letters[31] = 'V';
+letters[32] = 'W';
+letters[33] = 'X';
+letters[34] = 'Y';
+letters[35] = 'Z';
+letters[36] = ' ';
+letters[37] = '-';
+letters[38] = '.';
+letters[39] = ',';
+letters[40] = '!';
+letters[41] = '♥';
+
+var bytes = {};
+for (var k in letters) {
+    var v = letters[k];
+    bytes[v] = k;
+}
+
+window.onload = function() {
+    if (!('indexedDB' in window)) {
+      console.log('This browser doesn\'t support IndexedDB');
+    }
+    
+    var open = indexedDB.open("wreckingView", 1);
+
+    // Create the schema
+    open.onupgradeneeded = function() {
+        var db = open.result;
+        var store = db.createObjectStore("roms", {autoIncrement: true});
+    };
+
+    open.onsuccess = function() {
+        var db = open.result;
+        var tx = db.transaction("roms", "readwrite");
+        var store = tx.objectStore("roms");
+    
+        r = store.get(1);
+        r.onsuccess = function() {
+            if (r.result) {
+                var uploadDiv = document.getElementById("uploadROM");
+                var editDiv = document.getElementById("editROM");
+                
+                uploadDiv.style.display = 'none';
+                editDiv.style.display = 'inline';
+                
+                var reader = new FileReader();
+                reader.readAsArrayBuffer(r.result);
+                
+                reader.onload = function(e) {
+                    if (e.target.readyState == FileReader.DONE) {
+                        var rom = e.target.result;
+                        var u8 = new Uint8Array(rom, 0, rom.length);
+                        
+                        for (var j = 0; j < 100; j++) {
+                            var name = "";
+                            for (var i = 0; i < 10; i++) {
+                                var b = u8[192 + j*64 + i];
+                                name = name.concat(letters[b]);
+                            }
+                            
+                            var phaseDiv = document.createElement("div");
+                            phaseDiv.setAttribute("style", "margin:7px;");
+                            
+                            var phaseText = document.createTextNode("Phase " + (j+1) + ": ");
+                            phaseDiv.append(phaseText);
+                            
+                            var phaseName = document.createElement("input");
+                            phaseName.setAttribute("id", "phase"+j);
+                            phaseName.setAttribute("type", "text");
+                            phaseName.setAttribute("value", name);
+                            
+                            phaseDiv.append(phaseName);
+                            editDiv.appendChild(phaseDiv)
+                            
+                        }
+                    }
+                }
+            } else {
+                
+            }
+        };
+    }
+}
+
+function saveRom(rom) {
+    if (!('indexedDB' in window)) {
+      console.log('This browser doesn\'t support IndexedDB');
+    }
+    
+    var open = indexedDB.open("wreckingView", 1);
+
+    // Create the schema
+    open.onupgradeneeded = function() {
+        var db = open.result;
+        var store = db.createObjectStore("roms", {autoIncrement: true});
+    };
+
+    open.onsuccess = function() {
+        var db = open.result;
+        var tx = db.transaction("roms", "readwrite");
+        var store = tx.objectStore("roms");
+        
+        var r = store.put(rom);
+        location.reload();
+    }
+}
+
+function downloadRom() {
+    if (!('indexedDB' in window)) {
+      console.log('This browser doesn\'t support IndexedDB');
+    }
+    
+    var open = indexedDB.open("wreckingView", 1);
+
+    // Create the schema
+    open.onupgradeneeded = function() {
+        var db = open.result;
+        var store = db.createObjectStore("roms", {autoIncrement: true});
+    };
+
+    open.onsuccess = function() {
+        var db = open.result;
+        var tx = db.transaction("roms", "readwrite");
+        var store = tx.objectStore("roms");
+    
+        r = store.get(1);
+        r.onsuccess = function() {
+            if (r.result) {
+                var reader = new FileReader();
+                reader.readAsArrayBuffer(r.result);
+                
+                reader.onload = function(e) {
+                    if (e.target.readyState == FileReader.DONE) {
+                        var rom = e.target.result;
+                        var u8 = new Uint8Array(rom, 0, rom.length);
+                        
+                        for (var j = 0; j < 100; j++) {
+                            var n = document.getElementById("phase"+j);
+                            var name = n.value.substring(0, 10).toUpperCase();
+                            
+                            while (name.length < 10) {
+                                name = name + " ";
+                            }
+                            
+                            for (var i = 0; i < 10; i++) {
+                                var b = u8[192 + j*64 + i];
+                                u8[192 + j*64 + i] = bytes[name[i]];
+                            }
+                        }
+                        
+                        var a = window.document.createElement('a');
+                        a.href = window.URL.createObjectURL(new Blob([u8]));
+                        a.download = "Wrecking Two.nes";
+
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }
+                }
+            } else {
+                
+            }
+        };
+    }
+}
+</script>
+<div id="uploadROM">
+    <h3>Upload Rom</h3>
+    <input type="file" value="Select ROM" onchange="javascript:saveRom(this.files[0]);"><br>
+</div>
+<div id="editROM" style="display:none;">
+    <h3>Edit ♥ ROM</h3>
+    <input type="button" value="Download ROM" onclick="javascript:downloadRom();">
+</div>
