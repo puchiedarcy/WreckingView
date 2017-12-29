@@ -102,9 +102,15 @@ window.onload = function() {
                             phaseName.setAttribute("type", "text");
                             phaseName.setAttribute("value", name);
                             
-                            phaseDiv.append(phaseName);
-                            editDiv.appendChild(phaseDiv)
+                            var phaseNumber = document.createElement("input");
+                            phaseNumber.setAttribute("name", "newphase");
+                            phaseNumber.setAttribute("type", "text");
+                            phaseNumber.setAttribute("value", j+1);
+                            phaseNumber.setAttribute("old", j+1);
                             
+                            phaseDiv.append(phaseName);
+                            phaseDiv.append(phaseNumber);
+                            editDiv.appendChild(phaseDiv)
                         }
                     }
                 }
@@ -133,7 +139,30 @@ function saveRom(rom) {
         var tx = db.transaction("roms", "readwrite");
         var store = tx.objectStore("roms");
         
-        var r = store.put(rom);
+        var r = store.put(rom, 1);
+        location.reload();
+    }
+}
+
+function deleteRom() {
+    if (!('indexedDB' in window)) {
+      console.log('This browser doesn\'t support IndexedDB');
+    }
+    
+    var open = indexedDB.open("wreckingView", 1);
+
+    // Create the schema
+    open.onupgradeneeded = function() {
+        var db = open.result;
+        var store = db.createObjectStore("roms", {autoIncrement: true});
+    };
+
+    open.onsuccess = function() {
+        var db = open.result;
+        var tx = db.transaction("roms", "readwrite");
+        var store = tx.objectStore("roms");
+    
+        r = store.delete(1);
         location.reload();
     }
 }
@@ -166,6 +195,18 @@ function downloadRom() {
                     if (e.target.readyState == FileReader.DONE) {
                         var rom = e.target.result;
                         var u8 = new Uint8Array(rom, 0, rom.length);
+                        var original = new Uint8Array(rom.slice(0), 0, rom.length);
+                        
+                        for (var i = 0; i < 100; i++) {
+                            var newPhase = document.querySelectorAll('input[name="newphase"][value="' + (i+1) + '"]');
+                            newPhase = newPhase[0];
+                            newNum = newPhase.value - 1;
+                            oldNum = newPhase.getAttribute("old") - 1;
+                            
+                            for (var j = 0; j < 64; j++) {
+                                u8[144 + (newNum*64) + j] = original[144 + (oldNum*64) + j]
+                            }
+                        }
                         
                         for (var j = 0; j < 100; j++) {
                             var n = document.getElementById("phase"+j);
@@ -204,4 +245,5 @@ function downloadRom() {
 <div id="editROM" style="display:none;">
     <h3>Edit ♥ ROM</h3>
     <input type="button" value="Download ROM" onclick="javascript:downloadRom();">
+    <input type="button" value="Delete ROM" onclick="javascript:deleteRom();">
 </div>
