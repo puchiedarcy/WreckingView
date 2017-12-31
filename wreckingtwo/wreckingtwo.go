@@ -3,7 +3,7 @@ package wreckingtwo
 import (
     "fmt"
     "html/template"
-    "net/http"    
+    "net/http"
 )
 
 func WreckingtwoHandler(w http.ResponseWriter, r *http.Request) {

@@ -1,17 +1,15 @@
-package main
+package dataexamples
 
 import (
     "fmt"
     "html/template"
-    "io"
     "net/http"
+    "io"
     
     "google.golang.org/appengine"
     "google.golang.org/appengine/datastore"
     "google.golang.org/appengine/file"
     "cloud.google.com/go/storage"
-    
-    "wreckingtwo"
 )
 
 type Phase struct {
@@ -24,19 +22,7 @@ type List struct {
     Rows    []interface{}
 }
 
-func init() {
-    http.HandleFunc("/favicon.ico", faviconHandler)
-    http.HandleFunc("/save", saveHandler)
-    http.HandleFunc("/upload", uploadHandler)
-    http.HandleFunc("/wreckingtwo", wreckingtwo.WreckingtwoHandler)
-    http.HandleFunc("/", defaultHandler)
-}
-
-func faviconHandler(w http.ResponseWriter, r *http.Request) {
-    return
-}
-
-func saveHandler(w http.ResponseWriter, r *http.Request) {
+func SaveHandler(w http.ResponseWriter, r *http.Request) {
     ctx := appengine.NewContext(r)
     
     p := Phase {
@@ -50,10 +36,10 @@ func saveHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
     
-    http.Redirect(w, r, "/", http.StatusSeeOther)
+    http.Redirect(w, r, "/dataexamples", http.StatusSeeOther)
 }
 
-func uploadHandler(w http.ResponseWriter, r *http.Request) {
+func UploadHandler(w http.ResponseWriter, r *http.Request) {
     ctx := appengine.NewContext(r)
     
     client, err := storage.NewClient(ctx)
@@ -77,19 +63,19 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
         fmt.Fprint(w, "P2 ", err)
     }
     
-    http.Redirect(w, r, "/", http.StatusSeeOther)
+    http.Redirect(w, r, "/dataexamples", http.StatusSeeOther)
 }
 
-func defaultHandler(w http.ResponseWriter, r *http.Request) {
+
+func ListHandler(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "text/html")
     fmt.Fprint(w, "<!DOCTYPE html><html>")
     fmt.Fprint(w, "<head><meta charset='UTF-8'></head>")
     fmt.Fprint(w, "<body>")
-    fmt.Fprint(w, "<h3>Welcome to Wrecking View!</h3>")
-    
+    fmt.Fprint(w, "<a href='/'>Back</a><br>")
     ctx := appengine.NewContext(r)
     
-    t2, _ := template.ParseFiles("save.html")
+    t2, _ := template.ParseFiles("dataexamples/save.html")
     t2.Execute(w, nil)
     
     q := datastore.NewQuery("Phase").Order("Number")
@@ -113,7 +99,7 @@ func defaultHandler(w http.ResponseWriter, r *http.Request) {
         i++
     }
     
-    tl, _ := template.ParseFiles("list.html")
+    tl, _ := template.ParseFiles("dataexamples/list.html")
     tl.ExecuteTemplate(w, "list", list)
     
     fmt.Fprint(w, "</body></html>")

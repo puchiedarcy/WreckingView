@@ -24,7 +24,7 @@
 {{end}}
 
 {{define "upload"}}
-<form action="/upload" method="POST" enctype="multipart/form-data">
+<form action="/dataexamples/upload" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="phase" value="{{.Number}}">
     <input type="file" name="image"><br>
     <input type="Submit" value="Add Image"><br>
