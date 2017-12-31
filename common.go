@@ -1,4 +1,4 @@
-package common
+package wreckingview
 
 import (
     "html/template"
