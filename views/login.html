@@ -1,45 +1,64 @@
-{{define "script"}}
-
-{{end}}
-
-{{define "content"}}
-<a href="javascript:void(0);" onclick="javascript:login();">Login with Google</a><br>
-<a href="javascript:void(0);" onclick="javascript:loginTwitter();">Login with Twiter</a><br>
-<a href="javascript:void(0);" onclick="javascript:logout();">Logout</a><br>
-
+{{define "login"}}
+<div id="loginLinks">
+    <a href="javascript:void(0);" onclick="javascript:login();">Login with Google</a>
+    <a href="javascript:void(0);" onclick="javascript:loginTwitter();">Login with Twiter</a>
+</div>
+<div id="logoutLink" style="display:none;">
+    <img id="userPhoto" src="" height="20" width="20">
+    <span id="userDisplayName"></span>
+    <input id="uid" type="hidden" value="0">
+    <a href="javascript:void(0);" onclick="javascript:logout();">Logout</a>
+</div>
 <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
 <script>
-// Initialize Firebase
-var config = {
-apiKey: "AIzaSyCNkUtzrV1yvk2VNwa80V0zMBpK9ONCIrQ",
-authDomain: "puchiedarcy-hrd.firebaseapp.com",
-databaseURL: "https://puchiedarcy-hrd.firebaseio.com",
-projectId: "puchiedarcy-hrd",
-storageBucket: "puchiedarcy-hrd.appspot.com",
-messagingSenderId: "907233535289"
-};
-firebase.initializeApp(config);
+    // Initialize Firebase
+    var config = {
+    apiKey: "AIzaSyCNkUtzrV1yvk2VNwa80V0zMBpK9ONCIrQ",
+    authDomain: "puchiedarcy-hrd.firebaseapp.com",
+    databaseURL: "https://puchiedarcy-hrd.firebaseio.com",
+    projectId: "puchiedarcy-hrd",
+    storageBucket: "puchiedarcy-hrd.appspot.com",
+    messagingSenderId: "907233535289"
+    };
+    firebase.initializeApp(config);
 
-function login() {
-    var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
-}
-
-function logout() {
-    firebase.auth().signOut();
-}
-
-function loginTwitter() {
-    var provider = new firebase.auth.TwitterAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
-}
-
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-        console.log(user.uid);
-    } else {
-        console.log("not logged in");
+    function login() {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithRedirect(provider);
     }
-});
+
+    function logout() {
+        firebase.auth().signOut();
+    }
+
+    function loginTwitter() {
+        var provider = new firebase.auth.TwitterAuthProvider();
+        firebase.auth().signInWithRedirect(provider);
+    }
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        var loginLinks = document.getElementById('loginLinks');
+        var logoutLink = document.getElementById('logoutLink');
+        var uid = document.getElementById('uid');
+        var photo = document.getElementById('userPhoto');
+        var displayName = document.getElementById('userDisplayName');
+        
+        if (user) {
+            loginLinks.style.display = 'none';
+            logoutLink.style.display = 'inline';
+            
+            var uid = document.getElementById('uid');
+            var photo = document.getElementById('userPhoto');
+            var displayName = document.getElementById('userDisplayName');
+            
+            uid.value = user.uid;
+            displayName.append(document.createTextNode(user.displayName));
+            photo.src = user.providerData[0].photoURL;
+        } else {
+            loginLinks.style.display = 'inline';
+            logoutLink.style.display = 'none';
+            displayName.innerHTML = '';
+        }
+    });
 </script>
 {{end}}

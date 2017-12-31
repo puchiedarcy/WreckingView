@@ -3,11 +3,17 @@
 <html>
 <head>
     <meta charset='UTF-8'>
-    {{template "script" .}}
+    {{block "script" .}}
+    {{end}}
 </head>
 <body>
-    <h3><a href="/">Welcome to Wrecking View!</a></h3>
-    {{template "content" .}}
+    <div id="topbar" style="overflow:hidden; position:fixed; top:0px; width:100%; background-color:#CCC;">
+        {{template "login" .}}
+    </div>
+    <div id="content" style="margin-top:25px;">
+        <h3><a href="/">Welcome to Wrecking View!</a></h3>
+        {{template "content" .}}
+    </div>
 </body>
 </html>
 {{end}}
