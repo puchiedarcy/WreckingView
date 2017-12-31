@@ -1,3 +1,4 @@
+{{define "script"}}
 <script>
 var letters = {};
 letters[0] = 0;
@@ -238,7 +239,9 @@ function downloadRom() {
     }
 }
 </script>
-<a href="/">Back</a><br>
+{{end}}
+
+{{define "content"}}
 <div id="uploadROM">
     <h3>Upload Rom</h3>
     <input type="file" value="Select ROM" onchange="javascript:saveRom(this.files[0]);"><br>
@@ -248,3 +251,4 @@ function downloadRom() {
     <input type="button" value="Download ROM" onclick="javascript:downloadRom();">
     <input type="button" value="Delete ROM" onclick="javascript:deleteRom();">
 </div>
+{{end}}

@@ -1,11 +1,11 @@
 package wreckingview
 
 import (
-    "html/template"
     "net/http"
     
     "wreckingtwo"
     "dataexamples"
+    "common"
 )
 
 func init() {
@@ -17,10 +17,5 @@ func init() {
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-    Render(w, "home.html", nil)
-}
-
-func Render(w http.ResponseWriter, templateName string, content interface{}) {
-    t, _ := template.ParseFiles("layout.html", templateName)
-    t.ExecuteTemplate(w, "layout", content)
+    common.Render(w, "home.html", nil)
 }
