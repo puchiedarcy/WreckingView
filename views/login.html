@@ -1,0 +1,45 @@
+{{define "script"}}
+
+{{end}}
+
+{{define "content"}}
+<a href="javascript:void(0);" onclick="javascript:login();">Login with Google</a><br>
+<a href="javascript:void(0);" onclick="javascript:loginTwitter();">Login with Twiter</a><br>
+<a href="javascript:void(0);" onclick="javascript:logout();">Logout</a><br>
+
+<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+<script>
+// Initialize Firebase
+var config = {
+apiKey: "AIzaSyCNkUtzrV1yvk2VNwa80V0zMBpK9ONCIrQ",
+authDomain: "puchiedarcy-hrd.firebaseapp.com",
+databaseURL: "https://puchiedarcy-hrd.firebaseio.com",
+projectId: "puchiedarcy-hrd",
+storageBucket: "puchiedarcy-hrd.appspot.com",
+messagingSenderId: "907233535289"
+};
+firebase.initializeApp(config);
+
+function login() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithRedirect(provider);
+}
+
+function logout() {
+    firebase.auth().signOut();
+}
+
+function loginTwitter() {
+    var provider = new firebase.auth.TwitterAuthProvider();
+    firebase.auth().signInWithRedirect(provider);
+}
+
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        console.log(user.uid);
+    } else {
+        console.log("not logged in");
+    }
+});
+</script>
+{{end}}
