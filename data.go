@@ -36,7 +36,7 @@ func SaveHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
     
-    http.Redirect(w, r, "/dataexamples", http.StatusSeeOther)
+    http.Redirect(w, r, "/data", http.StatusSeeOther)
 }
 
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
@@ -63,7 +63,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
         fmt.Fprint(w, "P2 ", err)
     }
     
-    http.Redirect(w, r, "/dataexamples", http.StatusSeeOther)
+    http.Redirect(w, r, "/data", http.StatusSeeOther)
 }
 
 

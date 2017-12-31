@@ -5,9 +5,9 @@ import (
 )
 
 func init() {
-    http.HandleFunc("/dataexamples", ListHandler)
-    http.HandleFunc("/dataexamples/save", SaveHandler)
-    http.HandleFunc("/dataexamples/upload", UploadHandler)
+    http.HandleFunc("/data", ListHandler)
+    http.HandleFunc("/data/save", SaveHandler)
+    http.HandleFunc("/data/upload", UploadHandler)
     http.HandleFunc("/wreckingtwo", WreckingtwoHandler)
     http.HandleFunc("/", homeHandler)
 }
