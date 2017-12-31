@@ -5,5 +5,5 @@ import (
 )
 
 func WreckingtwoHandler(w http.ResponseWriter, r *http.Request) {
-    Render(w, "wreckingtwo.html", nil)
+    Render(w, "views/wreckingtwo.html", nil)
 }

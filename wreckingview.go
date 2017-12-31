@@ -13,5 +13,5 @@ func init() {
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-    Render(w, "home.html", nil)
+    Render(w, "views/home.html", nil)
 }

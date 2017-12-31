@@ -75,7 +75,7 @@ func ListHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Fprint(w, "<a href='/'>Back</a><br>")
     ctx := appengine.NewContext(r)
     
-    t2, _ := template.ParseFiles("save.html")
+    t2, _ := template.ParseFiles("views/data_save.html")
     t2.Execute(w, nil)
     
     q := datastore.NewQuery("Phase").Order("Number")
@@ -99,7 +99,7 @@ func ListHandler(w http.ResponseWriter, r *http.Request) {
         i++
     }
     
-    tl, _ := template.ParseFiles("list.html")
+    tl, _ := template.ParseFiles("views/data_list.html")
     tl.ExecuteTemplate(w, "list", list)
     
     fmt.Fprint(w, "</body></html>")
