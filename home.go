@@ -9,6 +9,7 @@ func init() {
     http.HandleFunc("/data/save", SaveHandler)
     http.HandleFunc("/data/upload", UploadHandler)
     http.HandleFunc("/wreckingcreweditor", WreckingcreweditorHandler)
+    http.HandleFunc("/about", AboutHandler)
     http.HandleFunc("/", HomeHandler)
 }
 
