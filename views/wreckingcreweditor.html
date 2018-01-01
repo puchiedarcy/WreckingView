@@ -243,11 +243,15 @@ function downloadRom() {
 
 {{define "content"}}
 <div id="uploadROM">
-    <h3>Upload Rom</h3>
+    <h3>Upload Wrecing Crew Rom</h3>
     <input type="file" value="Select ROM" onchange="javascript:saveRom(this.files[0]);"><br>
 </div>
 <div id="editROM" style="display:none;">
-    <h3>Edit ♥ ROM</h3>
+    <h3>Edit Wrecking Crew ROM</h3>
+    <p>Use this tool to rename phases and reorder them.<p>
+    <p>Valid characters for phase names are 0-9, A-Z, space, period, comma, hyphen, exclamation point, and ♥.</p>
+    <p>Change the number in the right text box to reassign the phase to a new number.<p>
+    <p>If you're looking for a level editor, <a href="http://www.romhacking.net/utilities/248/">Demolition</a> is a great tool.</p>
     <input type="button" value="Download ROM" onclick="javascript:downloadRom();">
     <input type="button" value="Delete ROM" onclick="javascript:deleteRom();">
 </div>

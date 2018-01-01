@@ -8,7 +8,7 @@ func init() {
     http.HandleFunc("/data", ListHandler)
     http.HandleFunc("/data/save", SaveHandler)
     http.HandleFunc("/data/upload", UploadHandler)
-    http.HandleFunc("/wreckingtwo", WreckingtwoHandler)
+    http.HandleFunc("/wreckingcreweditor", WreckingcreweditorHandler)
     http.HandleFunc("/", HomeHandler)
 }
 
