@@ -5,6 +5,7 @@ import (
     "net/http"
     "fmt"
     "strings"
+    "strconv"
     
     "google.golang.org/appengine"
     "google.golang.org/appengine/datastore"
@@ -83,7 +84,7 @@ func TrackSaveHandler(w http.ResponseWriter, r *http.Request) {
         Public: r.FormValue("Public") == "public",
     }
    
-    _, err := datastore.Put(ctx, datastore.NewKey(ctx, "Track", "puchie-" + t.Name, 0, nil), &t)
+    _, err := datastore.Put(ctx, datastore.NewIncompleteKey(ctx, "Track", nil), &t)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -94,8 +95,9 @@ func TrackSaveHandler(w http.ResponseWriter, r *http.Request) {
 
 func TrackAddHandler(w http.ResponseWriter, r *http.Request) {
     ctx := appengine.NewContext(r)
-
-    k := datastore.NewKey(ctx, "Track", r.FormValue("Key"), 0, nil)
+    
+    id, _ := strconv.ParseInt(r.FormValue("Key"), 10, 64)
+    k := datastore.NewKey(ctx, "Track", "", id, nil)
     var t Track
     datastore.Get(ctx, k, &t)
     
