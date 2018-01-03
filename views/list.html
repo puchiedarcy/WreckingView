@@ -1,0 +1,33 @@
+{{define "list"}}
+<table border='1px'>
+    <tr>
+        <th></th>
+        {{range .Headers}}
+            {{template "header" . }}
+        {{end}}
+    </tr>
+    {{range .Rows}}
+        {{template "row" .}}
+    {{end}}
+</table>
+{{end}}
+
+{{define "header"}}
+<th>{{.}}</th>
+{{end}}
+
+{{define "row"}}
+<tr>
+    <td>
+        {{block "action" .Key}}
+        {{end}}
+    </td>
+    {{range .Data}}
+        {{template "cell" .}}
+    {{end}}
+</tr>
+{{end}}
+
+{{define "cell"}}
+<td>{{.}}</td>
+{{end}}

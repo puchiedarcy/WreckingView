@@ -5,11 +5,14 @@ import (
 )
 
 func init() {
-    http.HandleFunc("/data", ListHandler)
-    http.HandleFunc("/data/save", SaveHandler)
+    http.HandleFunc("/data", DataListHandler)
+    http.HandleFunc("/data/save", DataSaveHandler)
     http.HandleFunc("/data/upload", UploadHandler)
     http.HandleFunc("/wreckingcreweditor", WreckingcreweditorHandler)
     http.HandleFunc("/about", AboutHandler)
+    http.HandleFunc("/track", TrackListHandler)
+    http.HandleFunc("/track/save", TrackSaveHandler)
+    http.HandleFunc("/track/addonebaby", TrackAddHandler)
     http.HandleFunc("/", HomeHandler)
 }
 

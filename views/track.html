@@ -1,0 +1,17 @@
+{{define "content"}}
+<h2>Track things you do daily</h2>
+{{template "list" .}}
+<form action="/track/save" method="POST">
+    <h3>New Track</h3>
+    Name: <input type="text" name="Name">
+    Public: <input type="checkbox" checked name="Public" value="public">
+    <input type="Submit" value="Add Track">
+</form>
+{{end}}
+
+{{define "action"}}
+<form action="/track/addonebaby" method="POST">
+    <input type="hidden" name="Key" value="{{.}}">
+    <input type="Submit" value="add one baby">
+</form>
+{{end}}

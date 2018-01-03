@@ -17,12 +17,12 @@ type Phase struct {
     Number string
 }
 
-type List struct {
+type DataList struct {
     Headers []string
     Rows    []interface{}
 }
 
-func SaveHandler(w http.ResponseWriter, r *http.Request) {
+func DataSaveHandler(w http.ResponseWriter, r *http.Request) {
     ctx := appengine.NewContext(r)
     
     p := Phase {
@@ -67,7 +67,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func ListHandler(w http.ResponseWriter, r *http.Request) {
+func DataListHandler(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "text/html")
     fmt.Fprint(w, "<!DOCTYPE html><html>")
     fmt.Fprint(w, "<head><meta charset='UTF-8'></head>")
@@ -81,7 +81,7 @@ func ListHandler(w http.ResponseWriter, r *http.Request) {
     q := datastore.NewQuery("Phase").Order("Number")
     count, _ := q.Count(ctx)
     
-    list := List {
+    list := DataList {
         Headers: []string{"Number", "Name", "Image"},
         Rows: make([]interface{}, count),
     }

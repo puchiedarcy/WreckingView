@@ -6,6 +6,11 @@ import (
 )
 
 func Render(w http.ResponseWriter, templateName string, content interface{}) {
-    t, _ := template.ParseFiles("views/layout.html", "views/login.html", templateName)
+    t, _ := template.ParseFiles(
+        "views/layout.html",
+        "views/login.html",
+        "views/list.html",
+        templateName,
+    )
     t.ExecuteTemplate(w, "layout", content)
 }
